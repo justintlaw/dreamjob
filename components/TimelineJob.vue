@@ -84,7 +84,7 @@
         <v-layout>
 
           <!-- Datepicker view for desktop -->
-          <v-menu :close-on-content-click="true" transition="scale-transition" offset-y min-width="auto">
+          <v-menu :close-on-content-click="false" transition="scale-transition" offset-y min-width="auto">
             <template v-slot:activator="{ on, attrs }">
               <v-text-field v-model="startDate" label="Start Date" append-outer-icon="mdi-calendar" v-bind="attrs" v-on="on"
                 readonly
@@ -94,7 +94,7 @@
             <v-date-picker v-model="startDate" :nudge-left="30" @change="updateStartDate(job)"></v-date-picker>
           </v-menu>
 
-          <v-menu :close-on-content-click="true" transition="scale-transition" offset-y min-width="auto">
+          <v-menu :close-on-content-click="false" transition="scale-transition" offset-y min-width="auto">
             <template v-slot:activator="{ on, attrs }">
               <v-text-field v-model="endDate" label="End Date" append-outer-icon="mdi-calendar" v-bind="attrs" v-on="on"
                 readonly

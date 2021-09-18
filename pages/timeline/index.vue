@@ -208,16 +208,14 @@ export default {
       let startDate, endDate
       console.log(timelineId)
 
-      console.log('timelines', this.timelines)
       let timelineIndex = this.timelines.findIndex(timeline => timeline.id === timelineId)
       let timelineJobs = this.timelines[timelineIndex].jobs
-      console.log('timelineindex', timelineIndex)
+
       // set the default dates for a new job
       if (timelineJobs.length > 0) {
         startDate = new Date(timelineJobs[timelineJobs.length - 1].endDate)
         startDate.setDate(startDate.getDate() + 1)
       } else {
-        console.log
         startDate = new Date()
       }
       endDate = new Date(startDate)
@@ -230,29 +228,14 @@ export default {
       }
 
       const options = await this.fetchOptions('POST', body)
-      console.log('options', options)
       const res = await fetch(`${API_BASE_URL}/timeline/${timelineId}/job`, options)
       const addedJob = await res.json()
-      console.log('addedJob', JSON.stringify(addedJob))
 
-      // add the job to the timeline
-      // timelineJobs.push(addedJob)
-      console.log('timelineJobssss', timelineJobs)
-      // this.$set(this.timeline.jobs, )
-      // this.timelines[timelineIndex].jobs.push(addedJob)
-      // this.$set(timelineJobs, timelineJobs.length - 1, addedJob)
-      // this.timelines = [...this.timelines, this.timelines[timelineIndex]]
-      // const jobToAdd = await this.getTimeline(timelineId)
-      // this.timelines.$set(timelineIndex, this.timelines[timelinesIndex])
-      // this.$set(this.timelines, timelineIndex, this.timelines[timelineIndex])
-      // this.timelines[timelineIndex].jobs = [...timelineJobs, addedJob]
+      // we need to reformat dates from the response
+      addedJob.startDate = addedJob.startDate.split('T')[0]
+      addedJob.endDate = addedJob.endDate.split('T')[0]
+
       this.timelines[timelineIndex].jobs.push(addedJob)
-      console.log('updated timeline', this.timelines[timelineIndex])
-      console.log('timelines', this.timelines)
-
-      // consider updating this to using a response from the post
-      // to update the timeline jobs instead
-      // this.timelines = await this.getAllTimelines()
     },
     async removeJobFromTimeline({ jobId, timelineId }) {
       let timelineIndex = this.timelines.findIndex(timeline => timeline.id === timelineId)
