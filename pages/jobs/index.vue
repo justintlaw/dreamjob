@@ -29,7 +29,7 @@ TODO:
                   <!-- <v-expand-x-transition> -->
                     <div v-show="isFiltering">
                       <v-btn class="ma-1 pa-1" small color="accent" type="submit">Set</v-btn>
-                      <v-btn class="ma-1 pa-1" small color="accent">Clear</v-btn>
+                      <v-btn class="ma-1 pa-1" small color="accent" @click="clearFilter">Clear</v-btn>
                     </div>
                   <!-- </v-expand-x-transition> -->
                   <v-btn class="ma-1 pa-1" small color="info" @click="filtering = !filtering" v-show="isFiltering">
@@ -92,7 +92,6 @@ TODO:
                       Part time
                     </v-btn>
                   </v-btn-toggle>
-                  {{ filter.jobType }}
                 </v-col>
                 <v-divider></v-divider>
                 <v-col cols="12" class="d-flex justify-space-between">
@@ -220,7 +219,7 @@ export default {
       const info = await Auth.currentSession()
       console.log(info.idToken.jwtToken)
     },
-    async onSubmit(event) {
+    async onSubmit (event) {
       event.preventDefault()
 
       // add filtering
@@ -268,9 +267,11 @@ export default {
 
       this.jobs = await this.getAllJobs(query)
     },
+    async clearFilter () {
+      this.jobs = await this.getAllJobs()
+    },
     async getAllJobs (queryParams = '?') {
       this.loading = true
-      console.log(`all jobs params: ${queryParams}`)
       const options = await this.fetchOptions()
       const res = await fetch(`${API_BASE_URL}/jobs${queryParams}`, options)
 
