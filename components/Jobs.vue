@@ -17,7 +17,7 @@ TODO:
     </v-expand-transition>
   </div>
 
-  <v-data-iterator v-if="!loadingTest" :items="jobs" :items-per-page.sync="itemsPerPage" :page.sync="page">
+  <v-data-iterator v-if="!loadingTest" :items="jobs" disable-pagination hide-default-footer>
     <!-- <template>
       <v-toolbar v-show="!isCreating" light rounded class="my-1">
         <v-text-field
@@ -124,6 +124,10 @@ export default {
       //   is_intern: false,
       //   post_date: null
       // },
+      pagination: {
+        rowsPerPage: 5,
+        page: 1
+      },
       itemsPerPage: 2,
       page: 1,
       loading: false,

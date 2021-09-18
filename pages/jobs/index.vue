@@ -44,6 +44,10 @@ TODO:
                 <div v-show="isFiltering" class="mt-2">
                 <v-divider></v-divider>
                 <v-container class="py-1 px-2">
+                  <v-text-field v-model="filter.jobTitle" label="Job Title"></v-text-field>
+                </v-container>
+                <v-divider></v-divider>
+                <v-container class="py-1 px-2">
                   <v-combobox v-model="filter.location" multiple chips deletable-chips label="Location"></v-combobox>
                 </v-container>
                 <v-divider></v-divider>
@@ -103,7 +107,6 @@ TODO:
                       Intern
                     </v-btn>
                   </v-btn-toggle>
-                  {{ filter.isIntern }}
                 </v-col>
                 <v-divider></v-divider>
                 <v-container>
@@ -188,10 +191,11 @@ export default {
       filtering: true,
       min: 0,
       max: 300000,
-      range: [20000, 280000],
+      range: [0, 300000],
       filter: {
+        jobTitle: '',
         location: [],
-        salaryRange: [20000, 280000],
+        salaryRange: [0, 300000],
         jobType: null,
         isIntern: null,
         skills: []
@@ -225,6 +229,11 @@ export default {
       // add filtering
       // build the query string
       let query = ''
+
+      // add job title
+      if (this.filter.jobTitle) {
+        query += `&jobTitle=${this.filter.jobTitle}`
+      }
 
       // add locations
       const location = this.filter.location
@@ -266,8 +275,16 @@ export default {
       }
 
       this.jobs = await this.getAllJobs(query)
+      console.log('QUERY', query)
     },
     async clearFilter () {
+      this.filter.jobTitle = ''
+      this.filter.location = []
+      this.filter.salaryRange = [0, 300000]
+      this.filter.jobType = null
+      this.filter.isIntern = null
+      this.filter.skills = []      
+
       this.jobs = await this.getAllJobs()
     },
     async getAllJobs (queryParams = '?') {
