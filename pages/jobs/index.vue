@@ -346,7 +346,6 @@ export default {
 
       try {
         idToken = (await Auth.currentSession()).idToken.jwtToken
-        console.log(idToken)
       } catch (err) {
         console.error(err)
         console.log('You are not signed in.')

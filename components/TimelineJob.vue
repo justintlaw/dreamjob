@@ -84,45 +84,59 @@
         <v-layout>
 
           <!-- Datepicker view for desktop -->
-          <v-menu :close-on-content-click="false" transition="scale-transition" offset-y min-width="auto">
-            <template v-slot:activator="{ on, attrs }">
-              <v-text-field v-model="startDate" label="Start Date" append-outer-icon="mdi-calendar" v-bind="attrs" v-on="on"
-                readonly
-                :rules="startDateRules"
-              ></v-text-field>
-            </template>
-            <v-date-picker v-model="startDate" :nudge-left="30" @change="updateStartDate(job)"></v-date-picker>
-          </v-menu>
+          <!-- <div v-if="!$vuetify.breakpoint.smAndDown"> -->
+            <v-menu :close-on-content-click="false" transition="scale-transition" offset-y min-width="auto" v-if="!$vuetify.breakpoint.smAndDown">
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field v-model="startDate" label="Start Date" append-outer-icon="mdi-calendar" v-bind="attrs" v-on="on"
+                  readonly
+                  :rules="startDateRules"
+                ></v-text-field>
+              </template>
+              <v-date-picker v-model="startDate" :nudge-left="30" @change="updateStartDate(job)"></v-date-picker>
+            </v-menu>
 
-          <v-menu :close-on-content-click="false" transition="scale-transition" offset-y min-width="auto">
-            <template v-slot:activator="{ on, attrs }">
-              <v-text-field v-model="endDate" label="End Date" append-outer-icon="mdi-calendar" v-bind="attrs" v-on="on"
-                readonly
-                :rules="endDateRules"
-              ></v-text-field>
-            </template>
-            <v-date-picker v-model="endDate" @change="updateEndDate(job)"></v-date-picker>
-          </v-menu>
+            <v-menu :close-on-content-click="false" transition="scale-transition" offset-y min-width="auto" v-if="!$vuetify.breakpoint.smAndDown">
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field v-model="endDate" label="End Date" append-outer-icon="mdi-calendar" v-bind="attrs" v-on="on"
+                  readonly
+                  :rules="endDateRules"
+                ></v-text-field>
+              </template>
+              <v-date-picker v-model="endDate" @change="updateEndDate(job)"></v-date-picker>
+            </v-menu>
+          <!-- </div> -->
 
           <!-- Datepicker view for mobile (leave it to the device) -->
-          <div v-if="$vuetify.breakpoint.smAndDown" class="d-inline-flex">
-            <div class="d-flex">
-              <v-text-field v-model="startDate" label="Start Date" append-outer-icon="mdi-calendar" v-bind="attrs" v-on="on"
-                readonly
-                :rules="startDateRules"
-              ></v-text-field>
-              <label for="startDate">Start Date</label>
-              <input type="date" v-model="startDate" />
-            </div>
+          <div v-if="$vuetify.breakpoint.smAndDown">
+            <v-dialog
+              v-model="startDateDialog"
+              width="500"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field v-model="startDate" label="Start Date" append-outer-icon="mdi-calendar" v-bind="attrs" v-on="on"
+                  readonly
+                  :rules="startDateRules"
+                ></v-text-field>
+                
+              </template>
 
-            <div class="d-flex">
-              <v-text-field v-model="endDate" label="End Date" append-outer-icon="mdi-calendar" v-bind="attrs" v-on="on"
-                readonly
-                :rules="endDateRules"
-              ></v-text-field>
-              <label for="d-flex">End Date</label>
-              <input type="date" v-model="endDate" />
-            </div>
+              <v-date-picker v-model="startDate" :nudge-left="30" @change="updateStartDate(job)"></v-date-picker>
+            </v-dialog>
+
+            <v-dialog
+              v-model="endDateDialog"
+              width="500"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field v-model="endDate" label="End Date" append-outer-icon="mdi-calendar" v-bind="attrs" v-on="on"
+                  readonly
+                  :rules="endDateRules"
+                ></v-text-field>
+                
+              </template>
+
+              <v-date-picker v-model="endDate" :nudge-left="30" @change="updateEndDate(job)"></v-date-picker>
+            </v-dialog>
           </div>
         </v-layout>
       </div>
@@ -201,10 +215,14 @@ export default {
   data () {
     return {
       months: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'NOV', 'OCT', 'DEC'],
+      startDateDialog: false,
+      endDateDialog: false,
       editing: false,
       isEditing: false,
       startDate: new Date(),
       endDate: new Date(),
+      currentStartDate: this.job.startDate.valueOf(),
+      currentEndDate: this.job.endDate.valueOf(),
       message: '',
       showMessage: false,
       loadingDelete: false,
@@ -234,10 +252,18 @@ export default {
   },
   methods: {
     updateStartDate(job) {
+      if (this.$vuetify.breakpoint.smAndDown) {
+        this.startDateDialog = !this.startDateDialog
+      }
+
       this.$refs.form.validate()
       this.$emit('update-start-date', { ...job, startDate: this.startDate })
     },
     updateEndDate(job) {
+      if (this.$vuetify.breakpoint.smAndDown) {
+        this.endDateDialog = !this.endDateDialog
+      }
+
       this.$refs.form.validate()
       this.$emit('update-end-date', { ...job, endDate: this.endDate })
     },
@@ -272,8 +298,10 @@ export default {
       // reset the form if cancelled
       if (this.isEditing) {
         this.$refs.form.resetValidation()
-        this.startDate = this.job.startDate
-        this.endDate = this.job.endDate
+        this.startDate = this.currentStartDate.valueOf()
+        this.endDate = this.currentEndDate.valueOf()
+      } else {
+        this.$refs.form.validate()
       }
       this.isEditing = !this.isEditing
     },
@@ -296,8 +324,8 @@ export default {
     }
   },
   created() {
-    this.startDate = this.job.startDate
-    this.endDate = this.job.endDate
+    this.startDate = this.job.startDate.valueOf()
+    this.endDate = this.job.endDate.valueOf()
   }
 }
 </script>
