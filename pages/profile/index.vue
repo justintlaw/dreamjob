@@ -79,21 +79,21 @@ import { Auth, formField }  from 'aws-amplify';
 import { API_BASE_URL } from '../../constants'
 
 export default {
-  created() {
-    onAuthUIStateChange((authState, authData) => {
-      this.authState = authState;
-      // this.user = authData;
-      this.user = user
-      // this.$authState = authState
-      // this.$state.updateUser()
-      this.$store.commit('updateUser', {
-        authState,
-        authData
-      })
-      console.log('vuex state', this.$store.state.authState)
-      console.log('authState: ', authState)
-    })
-  },
+  // created() {
+  //   onAuthUIStateChange((authState, authData) => {
+  //     this.authState = authState;
+  //     // this.user = authData;
+  //     this.user = user
+  //     // this.$authState = authState
+  //     // this.$state.updateUser()
+  //     this.$store.commit('updateUser', {
+  //       authState,
+  //       authData
+  //     })
+  //     console.log('vuex state', this.$store.state.authState)
+  //     console.log('authState: ', authState)
+  //   })
+  // },
   data() {
     return {
       loading: true,
@@ -137,6 +137,12 @@ export default {
 
       await this.createUser()
       console.log('user created')
+    },
+    async updateUser() {
+      console.log('UPDATING')
+        this.user = await Auth.currentAuthenticatedUser()
+        this.email = this.user.attributes.email
+        this.name = this.user.attributes.name
     },
     signOut: async () => Auth.signOut(),
     // TODO

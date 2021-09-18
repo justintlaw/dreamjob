@@ -18,58 +18,15 @@ TODO:
   </div>
 
   <v-data-iterator v-if="!loadingTest" :items="jobs" disable-pagination hide-default-footer>
-    <!-- <template>
-      <v-toolbar v-show="!isCreating" light rounded class="my-1">
-        <v-text-field
-          class="px-1"
-          v-model="search"
-          clearable
-          flat
-          solo-inverted
-          hide-details
-          prepend-inner-icon="mdi-magnify"
-          label="Search"
-        ></v-text-field>
-        <template v-if="$vuetify.breakpoint.mdAndUp">
-          <v-spacer></v-spacer>
-          <v-select
-            class="px-1"
-            v-model="sortBy"
-            flat
-            solo-inverted
-            hide-details
-            :items="keys"
-            prepend-inner-icon="mdi-magnify"
-            label="Sort by"
-          ></v-select>
-          <v-spacer></v-spacer>
-          <v-btn-toggle
-            class="mx-1"
-            v-model="sortDesc"
-            mandatory
-          >
-            <v-btn
-              large
-              depressed
-              :value="false"
-            >
-              <v-icon>mdi-arrow-up</v-icon>
-            </v-btn>
-            <v-btn
-              large
-              depressed
-              :value="true"
-            >
-              <v-icon>mdi-arrow-down</v-icon>
-            </v-btn>
-          </v-btn-toggle>
-        </template>
-      </v-toolbar>
-    </template> -->
-    <div v-for="job in jobs" :key="job.id">
+    <div v-for="job in jobs.slice(currentIndex, currentIndex + itemsPerPage)" :key="job.id">
       <Job :job="job" @update-job="updateJob" @delete-job="removeJob" />
     </div>
   </v-data-iterator>
+  <v-pagination
+    v-if="!loadingTest"
+    v-model="page"
+    :length="numPages"
+  ></v-pagination>
 </div>
 </template>
 
@@ -102,46 +59,45 @@ export default {
   },
   computed: {
     jobsFetched: function () {
-      console.log('jobsFetched', this.jobs)
       return this.jobs
     },
     isLoading: function () {
       return this.loading
-    }//,
-    // isCreating: function () {
-    //   return this.creating
-    // }
+    },
+    numPages: function () {
+      return Math.ceil(this.jobs.length / 5)
+    },
+    currentIndex: function () {
+      // if (this.jobs.length <= 5) {
+      //   return 1
+      // }
+
+      return (this.page - 1) * 5
+    },
+    lastIndex: function () {
+      return this.currentIndex() + 5
+    }
+  },
+  watch: {
+    // watch changes in job and adjust page if necessary
+    jobs: function () {
+      const numPages = Math.ceil(this.jobs.length / 5)
+
+      if (this.page > numPages) {
+        this.page = numPages
+      }
+    }
   },
   data () {
     return {
-      // newJob: {
-      //   title: '',
-      //   location: '',
-      //   description: '',
-      //   salary: '',
-      //   company: '',
-      //   type: '',
-      //   is_intern: false,
-      //   post_date: null
-      // },
-      pagination: {
-        rowsPerPage: 5,
-        page: 1
-      },
-      itemsPerPage: 2,
+      itemsPerPage: 5,
       page: 1,
       loading: false,
       creating: true
     }
   },
   async mounted () {
-    // temporary
-    // find out why without set timeout the datatable is being shown before mounted is called
-    // setTimeout(() => {
-    //   this.loading = false
-    // }, 1200)
     this.loading = false
-    // this.loading = false
   },
   async created () {
     this.loading = true

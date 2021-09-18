@@ -335,7 +335,9 @@ export default {
   },
   async created() {
     this.timelines = await this.getAllTimelines()
-    this.timeline = this.timelines[0]
+    if (this.timelines) {
+      this.timeline = this.timelines[0]
+    }
     this.jobs = await this.getAllJobs()
   }
 }
