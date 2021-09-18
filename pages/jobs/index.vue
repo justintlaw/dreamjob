@@ -57,29 +57,28 @@ TODO:
                     hide-details>
                   </v-range-slider>
                     <div class="d-flex justify-space-between">
-                    <!-- <v-chip class ="pa-1" small label outlined color="pink">MIN</v-chip> -->
-                    <div style="width: 80px">
-                    <v-text-field
-                      :value="filter.salaryRange[0]"
-                      single-line
-                      type="number"
-                      step="1000"
-                      hide-details
-                      dense
-                      @change="$set(range, 0, $event)"
-                    ></v-text-field>
-                    </div>
+                      <div style="width: 80px">
+                        <v-text-field
+                          :value="filter.salaryRange[0]"
+                          single-line
+                          type="number"
+                          step="1000"
+                          hide-details
+                          dense
+                          @change="$set(range, 0, $event)"
+                        ></v-text-field>
+                      </div>
 
                     <div style="width: 80px">
-                    <v-text-field
-                        :value="filter.salaryRange[1]"
-                        single-line
-                        type="number"
-                        step="1000"
-                        hide-details
-                        dense
-                        @change="$set(range, 1, $event)"
-                    ></v-text-field>
+                      <v-text-field
+                          :value="filter.salaryRange[1]"
+                          single-line
+                          type="number"
+                          step="1000"
+                          hide-details
+                          dense
+                          @change="$set(range, 1, $event)"
+                      ></v-text-field>
                     </div>
                   </div>
                 </v-col>
@@ -143,7 +142,6 @@ TODO:
 
           <v-divider class="py-2"></v-divider>
           <v-sheet color="grey lighten-3" rounded :min-height="275">
-            <!-- <TempLoader v-show="isLoading" /> -->
             <Jobs
               :jobs="jobs"
               :isCreating="isCreating"
@@ -157,7 +155,6 @@ TODO:
         </v-col>
         <v-col cols="12" md="2" lg="3" xl="3">
           <v-sheet rounded>
-            <!-- <HowTo /> -->
           </v-sheet>
         </v-col>
       </v-row>
@@ -177,7 +174,6 @@ TODO:
 import Jobs from '../../components/Jobs.vue'
 import TempLoader from '../../components/TempLoader.vue'
 import { Auth } from 'aws-amplify'
-// import { getUser } from 'userInfo'
 import { API_BASE_URL } from '../../constants'
 
 export default {
@@ -266,13 +262,10 @@ export default {
         }       
       }
 
-      // replace first '&' with '?'
       if (query) {
         query = query.replace('&', '?')
       }
 
-      console.log(`got params: ${query}`)
-      // const jobs = await this.getAllJobs(query)
       this.jobs = await this.getAllJobs(query)
     },
     async getAllJobs (queryParams = '?') {
@@ -310,7 +303,7 @@ export default {
         ...newJob,
         userId: user.attributes.sub
       }
-      // console.log(JSON.stringify(newJob))
+
       const options = await this.fetchOptions('POST', JSON.stringify(newJob))
 
       const res = await fetch(`${API_BASE_URL}/jobs`, options)
@@ -323,26 +316,13 @@ export default {
 
       const res = await fetch(`${API_BASE_URL}/jobs/${newJob.id}`, options)
 
-      // TODO change this logic to remove by job id
-      // use lodash
-
       const data = await res.json()
       console.log('data', JSON.stringify(data))
 
       this.jobs = this.jobs
         .map(job => job.id === data.id ? data : job)
-
-      
-
-      // TODO re-enable this after job id is passed too
-      // this.jobs = [...this.jobs, data]
-      // TEMPORARY
-      // this.jobs = await this.getAllJobs()
     },
     async deleteJob (id) {
-      // remove the item from view first
-      // so that the item disappears immediately
-      // instead of waiting for the call to finish
       this.jobs = this.jobs
         .filter(job => job.id !== id)
 
@@ -395,10 +375,6 @@ export default {
     
     this.filtering = this.$vuetify.breakpoint.smAndDown ? false : true
     this.jobs = await this.getAllJobs()
-
-    // TESTING
-    // const user = await Auth.currentAuthenticatedUser()
-    // console.log(user)
   }
 }
 </script>
