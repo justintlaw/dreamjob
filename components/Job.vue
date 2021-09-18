@@ -116,7 +116,7 @@ TODO:
           <v-row>
             <v-col cols="12" md="10" lg="10" xl="10">
               <div v-show="!isEditing" @dblclick="toggleEdit()">
-                <label for="description">Description:</label>
+                <label class="font-weight-bold" for="description">Description</label>
                 <p id="description">{{ job.description }}</p>
               </div>
               <div v-show="isEditing">
@@ -125,11 +125,11 @@ TODO:
             </v-col>
           </v-row>
           <v-row>
-            <v-col cols="6" md="3" lg="3" xl="3">
+            <v-col cols="6" md="4" lg="4" xl="4">
               <div class="settings">
                 <div v-show="!isEditing" @dblclick="toggleEdit()">
-                  <label for="company" style="display: inline-block">Company</label>
-                  <div id="company">
+                  <label class="font-weight-bold" for="company" style="display: inline-block">Company</label>
+                  <div class="font-italic" id="company">
                     {{ job.company }}
                   </div>
                 </div>
@@ -140,11 +140,11 @@ TODO:
 
               </div>
             </v-col>
-            <v-col cols="6" md="2" lg="2" xl="2">
+            <v-col cols="6" md="3" lg="3" xl="3">
               <div>
                 <div v-show="!isEditing" @dblclick="toggleEdit()">
-                  <label for="location" style="display: inline-block">Location</label>
-                  <div id="location">
+                  <label class="font-weight-bold" for="location" style="display: inline-block">Location</label>
+                  <div class="font-italic" id="location">
                     {{ job.location }}
                   </div>
                 </div>
@@ -154,10 +154,10 @@ TODO:
                 </div>
               </div>
             </v-col>
-            <v-col cols="6" md="2" lg="2" xl="2">
+            <v-col cols="6" md="3" lg="3" xl="3">
               <div v-show="!isEditing" @dblclick="toggleEdit()">
-                <label for="salary" style="display: inline-block">Salary</label>
-                <div id="salary">
+                <label class="font-weight-bold" for="salary" style="display: inline-block">Salary</label>
+                <div class="font-italic" id="salary">
                   {{ job.salary }}
                 </div>
               </div>
@@ -166,10 +166,10 @@ TODO:
                 <v-text-field id="salary" type="number" step="1000" v-model="newJob.salary" label="Salary" placeholder="Enter salary"></v-text-field>
               </div>
             </v-col>
-            <v-col cols="6" md="2" lg="2" xl="2">
+            <v-col cols="6" md="4" lg="4" xl="4">
               <div v-show="!isEditing" @dblclick="toggleEdit()">
-                <label for="type" style="display: inline-block">Type</label>
-                <div id="type">
+                <label class="font-weight-bold" for="type" style="display: inline-block">Type</label>
+                <div class="font-italic" id="type">
                   {{ job.type }}
                 </div>
               </div>
@@ -178,10 +178,10 @@ TODO:
                 <v-select v-model="newJob.type" :items="jobTypes" label="Full/Part Time" solo></v-select>
               </div>
             </v-col>
-            <v-col cols="6" md="2" lg="2" xl="2">
+            <v-col cols="6" md="6" lg="6" xl="6">
               <div v-show="!isEditing" @dblclick="toggleEdit()">
-                <label for="intern" style="display: inline-block">Intern</label>
-                <div id="intern">
+                <label class="font-weight-bold" for="intern" style="display: inline-block">Intern</label>
+                <div class="font-italic" id="intern">
                   {{ job.is_intern ? 'Yes' : 'No' }}
                 </div>
               </div>

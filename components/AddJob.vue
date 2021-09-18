@@ -261,7 +261,6 @@ export default {
   computed: {
     titleErrors () {
       const errors = []
-      console.log(this.$v.newJob.title.required)
       if (!this.$v.newJob.title.$dirty) return errors
       !this.$v.newJob.title.maxLength && errors.push('Job title length cannot be more than 30 characters long.')
       !this.$v.newJob.title.required && errors.push('Job title is required.')
@@ -294,11 +293,9 @@ export default {
     },
     jobTypeErrors() {
       const errors = []
-      console.log('type errors')
-      console.log(!this.$v.newJob.type.required)
       if (!this.$v.newJob.type.$dirty) return errors
       !this.$v.newJob.type.required && errors.push('Job type is required.')
-      return 'Job type is required.'
+      return errors
     },
     isInternErrors() {
        const errors = []
@@ -421,7 +418,6 @@ export default {
       this.cancelCreate()
     },
     cancelCreate() {
-      console.log('cancelling')
       // we need to deconstruct the object into newJob to avoid overwriting the template
       this.newJob = { ...JobTemplate }
 
