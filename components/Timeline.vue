@@ -35,7 +35,7 @@
       <div v-show="editingTitle">
         <div class="d-flex">
           <v-form @submit="submitNameChange">
-            <v-text-field v-model="newTitle" label="Title" @keyup.enter="submit"></v-text-field>
+            <v-text-field v-model="newTitle" label="Title"></v-text-field>
           </v-form>
           <v-btn icon @click="cancelEditTitle" class="mt-4">
             <v-icon depressed fab color="danger">mdi-close</v-icon>
@@ -495,7 +495,7 @@ export default {
 
       // this is the only validation here for now
       if (this.newTitle && this.newTitle !== this.timeline.name) {
-        this.$emit('update-timeline')
+        this.$emit('update-timeline-name', { timelineId: this.timeline.id, newName: this.newTitle })
       }
     },
     onSubmit(event = null) {

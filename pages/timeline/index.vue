@@ -90,6 +90,7 @@
                 @shift-down="shift"
                 @create-timeline="createTimeline"
                 @update-timeline="updateTimeline"
+                @update-timeline-name="updateTimelineName"
                 @delete-timeline="deleteTimeline"
                 @add-job-to-timeline="addJobToTimeline"
                 @update-timeline-job-date="updateTimelineJobDate"
@@ -263,11 +264,14 @@ export default {
         }
       }
     },
+    // this should be removed and combined with update timeline
     async updateTimelineName({ timelineId, newName }) {
       const options = await this.fetchOptions('POST', { newName })
       const res = await fetch(`${API_BASE_URL}/timeline/${timelineId}`, options)
-
       const data = await res.json()
+
+      let timelineIndex = this.timelines.findIndex(timeline => timeline.id === timelineId)
+      this.timelines[timelineIndex].name = data.name
     },
     async updateTimelineJobDate(timelineJob) {
       console.log('updating!!!', timelineJob)

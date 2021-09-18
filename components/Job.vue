@@ -117,7 +117,7 @@ TODO:
             <v-col cols="12" md="10" lg="10" xl="10">
               <div v-show="!isEditing" @dblclick="toggleEdit()">
                 <label class="font-weight-bold" for="description">Description</label>
-                <p id="description">{{ job.description }}</p>
+                <p id="description">{{ job.description ? job.description : 'No description' }}</p>
               </div>
               <div v-show="isEditing">
                 <v-textarea v-model="newJob.description" label="Job Description" hint="Enter details about the job here"></v-textarea>
