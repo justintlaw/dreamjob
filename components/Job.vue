@@ -228,6 +228,8 @@ TODO:
 </style>
 
 <script>
+import JobSkills from './JobSkills.vue'
+
 const JobTemplate = {
   title: '',
   location: '',
@@ -241,6 +243,9 @@ const JobTemplate = {
 }
 
 export default {
+  components: {
+    JobSkills
+  },
   name: 'Job',
   props: {
     job: Object

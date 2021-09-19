@@ -6,28 +6,28 @@ TODO:
 -->
 
 <template>
-<div class="pa-2 px-4">
-  <div v-if="loadingTest">
-    <TempLoader />
-  </div>
-
-  <div>
-    <v-expand-transition>
-      <AddJob v-show="isCreating" @cancel-add="$emit('cancel-add')" @add-job="addJob" />
-    </v-expand-transition>
-  </div>
-
-  <v-data-iterator v-if="!loadingTest" :items="jobs" disable-pagination hide-default-footer>
-    <div v-for="job in jobs.slice(currentIndex, currentIndex + itemsPerPage)" :key="job.id">
-      <Job :job="job" @update-job="updateJob" @delete-job="removeJob" />
+  <div class="pa-2 px-4">
+    <div v-if="loadingTest">
+      <TempLoader />
     </div>
-  </v-data-iterator>
-  <v-pagination
-    v-if="!loadingTest"
-    v-model="page"
-    :length="numPages"
-  ></v-pagination>
-</div>
+
+    <div>
+      <v-expand-transition>
+        <AddJob v-show="isCreating" @cancel-add="$emit('cancel-add')" @add-job="addJob" />
+      </v-expand-transition>
+    </div>
+
+    <v-data-iterator v-if="!loadingTest" :items="jobs" disable-pagination hide-default-footer>
+      <div v-for="job in jobs.slice(currentIndex, currentIndex + itemsPerPage)" :key="job.id">
+        <Job :job="job" @update-job="updateJob" @delete-job="removeJob" />
+      </div>
+    </v-data-iterator>
+    <v-pagination
+      v-if="jobs && jobs.length > 5 && !loadingTest"
+      v-model="page"
+      :length="numPages"
+    ></v-pagination>   
+  </div>
 </template>
 
 <script>
@@ -73,14 +73,16 @@ export default {
       // }
 
       return (this.page - 1) * 5
-    },
-    lastIndex: function () {
-      return this.currentIndex() + 5
     }
   },
   watch: {
     // watch changes in job and adjust page if necessary
     jobs: function () {
+      // make sure the user is at least on page one
+      if (this.jobs && this.jobs.length > 0 && this.jobs.length <= 5) {
+        this.page = 1
+      }
+
       const numPages = Math.ceil(this.jobs.length / 5)
 
       if (this.page > numPages) {

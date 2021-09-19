@@ -20,7 +20,7 @@
     
     <div v-if="user">
       <v-container>
-        <h1 class="text-h1">Welcome<span>{{ name ? `, ${name}` : '' }}</span></h1>
+        <h1 :class="['text-h2', $vuetify.breakpoint.smAndDown ? 'pt-2' : 'pt-5']">Welcome<span>{{ name ? `, ${name}` : '' }}</span></h1>
         <p class="text-subtitle-1 pb-0 mb-0">Here are some details about your account.</p>
         <p class="text-subtitle-1 py-0 my-0">{{ email }}</p>
       </v-container>

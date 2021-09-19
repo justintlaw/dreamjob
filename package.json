@@ -6,7 +6,8 @@
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
-    "generate": "nuxt generate"
+    "generate": "nuxt generate",
+    "deploy": "npm run generate && cd deployment/dreamjob && cdk deploy"
   },
   "dependencies": {
     "@aws-amplify/ui-vue": "^1.0.13",

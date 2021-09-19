@@ -20,7 +20,7 @@
 
       <!-- Hide buttons on mobile, instead use nav drawer -->
       <v-toolbar-items class="d-none d-md-flex">
-        <v-btn to="/" class="no-active px-10 primary" active-class="no-actice" depressed x-large nuxt>
+        <v-btn to="/" class="no-active px-10 primary" active-class="no-active" depressed x-large nuxt>
           <v-icon size="25" left>mdi-home-outline</v-icon>
           <span>Home</span>
         </v-btn>
