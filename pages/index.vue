@@ -4,7 +4,7 @@
       <v-col cols="12">
         <div class="">
           <!-- <h2 class="text-h2 text-md-h1 pb-2">Dreamjob</h2> -->
-          <h2 :class="['text-h2 text-md-h2 text-center pb-6']">
+          <h2 :class="['text-h3 text-md-h2 text-center pb-6', $vuetify.breakpoint.smAndDown && 'font-weight-light']">
             Dreamjob <v-icon color="primary" :size="$vuetify.breakpoint.smAndDown ? 60 : 80">mdi-database-search-outline</v-icon>
           </h2>
           <!-- <p class="text-center text-subtitle pl-2">Save information about your favorite jobs and build your career timeline!</p> -->

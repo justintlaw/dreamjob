@@ -75,8 +75,15 @@
 
 <script>
 import { onAuthUIStateChange, AuthState } from '@aws-amplify/ui-components'
-import { Auth, formField }  from 'aws-amplify';
+import { Auth, Hub, formField }  from 'aws-amplify';
 import { API_BASE_URL } from '../../constants'
+
+const listener = (data) => {
+  switch (data.payload.event) {
+    case 'signIn':
+      console.log('signing in HUBBBB')
+  }
+}
 
 export default {
   // created() {
@@ -93,6 +100,18 @@ export default {
   //     console.log('vuex state', this.$store.state.authState)
   //     console.log('authState: ', authState)
   //   })
+  // },
+  async mounted() {
+    Hub.listen('auth', (data) => {
+      switch (data.payload.event) {
+        case 'signIn':
+          this.updateUser()
+          console.log('signing in HUBBBB')
+      }
+    })
+  },
+  // async updated() {
+
   // },
   data() {
     return {
@@ -138,12 +157,6 @@ export default {
       await this.createUser()
       console.log('user created')
     },
-    async updateUser() {
-      console.log('UPDATING')
-        this.user = await Auth.currentAuthenticatedUser()
-        this.email = this.user.attributes.email
-        this.name = this.user.attributes.name
-    },
     signOut: async () => Auth.signOut(),
     // TODO
     // Move this to a plugin since it will be used in most pages
@@ -166,6 +179,17 @@ export default {
       this.loading = false
 
       return data
+    },
+    async updateUser() {
+      try {
+        const data = await this.getUser()
+
+        this.jobCount = data.jobCount
+        this.timelineCount = data.timelineCount
+        this.skills = data.skills
+      } catch (err) {
+        console.error(err)
+      }
     },
     async createUser() {
       const options = await this.fetchOptions('POST')
